@@ -1,0 +1,115 @@
+@import '_Vars.scss';
+
+@import "~normalize.css";
+
+* {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    min-height: 100vh;
+
+    background-color: $purple;
+    color: $yellow;
+
+    font-family: $body-font;
+}
+
+body {
+    font-size: 1.5em;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.root {
+    width: 100%;
+    height: 100%;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+  
+h1 {
+    font-family: $header-font;
+    font-size: 3em;
+    margin: 0.25em 0;
+    font-weight: 400;
+}
+
+h2 {
+    font-family: $body-font;
+    margin: 0.25em 0;
+    font-weight: 400;
+}
+h3 {
+    font-family: $body-font;
+    font-weight: 400;
+}
+h4 {
+    font-family: $body-font;
+    font-weight: 400;
+}
+h5 {
+    font-family: $body-font;
+    font-weight: 400;
+}
+h6 {
+    font-family: $body-font;
+    font-weight: 400;
+}
+
+em {
+    font-style: normal;
+}
+
+button {
+    min-width: 3em;
+    min-height: 2em;
+    border-radius: 1em;
+    border: 5px solid $yellow;
+    color: $yellow;
+    background-color: adjust-color($color: $yellow, $alpha: -1);
+
+    padding: 0em 1em;
+
+    transition: all 0.15s ease-in-out;
+    font-size: 1.25em;
+
+    &:hover {
+        background-color: $yellow;
+        border: 5px solid $yellow;
+        color: $purple;
+    }
+
+    &.selected {
+        background-color: $green;
+        border: 5px solid $green;
+        color: $purple;
+    }
+}
+
+input[type=number] {
+    
+    min-width: 2em;
+    min-height: 2em;
+    border-radius: .5em;
+    border: 5px solid $yellow;
+    color: $purple;
+    background-color: adjust-color($color: $yellow, $alpha: -1);
+    transition: all 0.15s ease-in-out;
+
+    &::-webkit-inner-spin-button {
+        color: $yellow;
+    }
+
+    &:focus {
+        border: 5px solid $green;
+        outline: none;
+    }
+}

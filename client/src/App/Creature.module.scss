@@ -1,0 +1,42 @@
+@import '../Vars';
+
+.creature {
+    display: grid;
+    grid:   "title title title"
+            "image numerics booleans"
+            / 5em auto auto;
+    gap: 1em;
+    padding: 1em;
+
+    $color: $purple;
+    border-radius: 1em;
+    border: 5px solid $green;
+
+    color: $purple;
+
+}
+
+.creatureImage {
+    grid-area: image;
+    height: 5em;
+    image-rendering: crisp-edges;
+}
+
+.creatureName {
+    grid-area: title;
+}
+
+.creatureNumerics {
+    grid-area: numerics;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.creatureBooleans {
+    grid-area: booleans;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}

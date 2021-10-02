@@ -1,20 +1,75 @@
-@import '_Vars.scss';
+@import '../_Vars.scss';
 
 .app {
-    
-
-    background-color: $purple;
-    color: $white;
-
-    font-family: $body-font;
-    font-size: 1.5em;
-
     width: 100%;
     height: 100%;
-
 }
 
 .header {
     text-align: center;
     padding: 0.5em;
+
+    h3 {
+        color: $lilac;
+    }
+}
+
+.puzzleListContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+}
+
+.puzzleList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+    
+    > button {
+        width: 7em;
+    }
+}
+
+
+.puzzle {
+    background-color: $lilac;
+    width: 100%;
+    max-width: 100%;
+    padding: 1em 2em;
+
+    p {
+        color: $purple
+    }
+
+    h1 {
+        text-align: center;
+        color: $purple
+    }
+
+    em {
+        color: $yellow;
+    }
+}
+
+.puzzleContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    width: 100%;
+    max-width: 100%;
+}
+
+.puzzleText {
+    flex: 1 1 50%;
+}
+
+.puzzleContent {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
