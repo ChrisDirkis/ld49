@@ -22,9 +22,17 @@ export interface IOrganismTemplate {
     armour: number;
     speed: number;
 
+    noWeaponsInput?: boolean;
+    noArmourInput?: boolean;
+    noSpeedInput?: boolean;
+
     eatsSeeds: boolean;
     eatsGrass: boolean;
     eatsLeaves: boolean;
+
+    noSeedsInput?: boolean;
+    noGrassInput?: boolean;
+    noLeavesInput?: boolean;
 }
 
 export interface IResources {
@@ -71,9 +79,9 @@ export function simulate(puzzle: IPuzzle, playerOrganisms: IOrganismTemplate[], 
     // Simulate
     const allRoundResults = [];
     for (let step = 0; step < puzzle.steps; step++) {
-        resources.seeds = puzzle.seedsPerRound;
-        resources.leaves = puzzle.leavesPerRound;
-        resources.grass = puzzle.grassPerRound;
+        resources.seeds =+ puzzle.seedsPerRound;
+        resources.leaves =+ puzzle.leavesPerRound;
+        resources.grass =+ puzzle.grassPerRound;
 
         let newOrganisms: number[] = new Array(organismTemplates.length).fill(0);
         let newTotal = 0;
@@ -130,13 +138,13 @@ function sample(organisms: {[key: number]: number}, totalOrganisms: number, tota
     return 0;
 }
 
-
+const predationEfficiency = 0.95;
 function interact(aOrganism: number, aOrganismTemplate: IOrganismTemplate, bOrganism: number, bOrganismTemplate: IOrganismTemplate, resources: IResources, rng: () => number): number[][] {
     const fightWinnerTemplate = getFightWinner(aOrganism, aOrganismTemplate, bOrganism, bOrganismTemplate);
     if (fightWinnerTemplate) {
         const fightLoserTemplate =  fightWinnerTemplate === aOrganismTemplate ? bOrganismTemplate : aOrganismTemplate;
         const fightWinner = fightWinnerTemplate === aOrganismTemplate ? aOrganism : bOrganism;
-        const predationEnergy = 0.95 * getEnergyCost(fightLoserTemplate);
+        const predationEnergy = predationEfficiency * getEnergyCost(fightLoserTemplate);
         return [[fightWinner, reproduce(fightWinnerTemplate, predationEnergy, rng)]];
     }
     else {
@@ -150,10 +158,8 @@ function interact(aOrganism: number, aOrganismTemplate: IOrganismTemplate, bOrga
 
 function getFightWinner(aOrganism: number, aOrganismTemplate: IOrganismTemplate, bOrganism: number, bOrganismTemplate: IOrganismTemplate): IOrganismTemplate | null {
     if (aOrganism === bOrganism) return null;
-    if (aOrganismTemplate.weapons > bOrganismTemplate.weapons + bOrganismTemplate.armour) return aOrganismTemplate;
-    if (bOrganismTemplate.weapons > aOrganismTemplate.weapons + aOrganismTemplate.armour) return bOrganismTemplate;
-    if (aOrganismTemplate.speed > bOrganismTemplate.speed) return aOrganismTemplate;
-    if (bOrganismTemplate.speed > aOrganismTemplate.speed) return bOrganismTemplate;
+    if (aOrganismTemplate.weapons > bOrganismTemplate.weapons + bOrganismTemplate.armour && aOrganismTemplate.speed > bOrganismTemplate.speed) return aOrganismTemplate;
+    if (bOrganismTemplate.weapons > aOrganismTemplate.weapons + aOrganismTemplate.armour && bOrganismTemplate.speed > aOrganismTemplate.speed) return bOrganismTemplate;
     return null;
 }
 
@@ -201,18 +207,6 @@ export function getEnergyCost(template: IOrganismTemplate): number {
     cost += template.speed;
 
     return cost;
-}
-
-function shuffle<T>(array: T[], rng: () => number) {
-    const length = array.length;
-    let temp: T;
-    for (let i = length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * i);
-        temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    return array;
 }
 
 function mulberry32(a: number) {

@@ -14,7 +14,7 @@ export const Puzzles: IPuzzle[] = [
         </>,
 
         organismTemplates: [],
-        steps: 1000,
+        steps: 200,
         initialEnergyPerSpecies: 200,
 
         seedsPerRound: 200,
@@ -32,6 +32,10 @@ export const Puzzles: IPuzzle[] = [
                 armour: 0,
                 speed: 0,
 
+                noWeaponsInput: true,
+                noArmourInput: true,
+                noSpeedInput: true,
+
                 eatsSeeds: false,
                 eatsLeaves: false,
                 eatsGrass: false,
@@ -44,6 +48,7 @@ export const Puzzles: IPuzzle[] = [
             <p>Hang on... this world is already populated?</p>
             <br/>
             <p>This world has a large population of mice, and I've been instructed to introduce predator cats. What did they say in academy... that's right! <em>For an animal to eat another, its weapons must be stronger than the other animal's weapons and armour, and it must be faster.</em> Luckily for me, these mice have no weapons or armour to speak of at all.</p>
+            <p>One more thing: The higher the energy requirement, the harder it is for an animal to breed. <em>If one species is outcompeting another, try make it more expenisve without making it better (hunting is pass/fail).</em></p>
         </>,
 
         organismTemplates: [
@@ -60,7 +65,7 @@ export const Puzzles: IPuzzle[] = [
                 eatsGrass: false,
             }
         ],
-        steps: 1000,
+        steps: 200,
         initialEnergyPerSpecies: 200,
 
         seedsPerRound: 200,
@@ -72,6 +77,147 @@ export const Puzzles: IPuzzle[] = [
         defaultPlayerOrganisms: [
             {
                 name: "predator cat",
+                image: CatIcon,
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+
+                eatsSeeds: false,
+                eatsLeaves: false,
+                eatsGrass: false,
+            }
+        ],
+    },
+    {
+        description: <>
+            <p>Two species? You've got to be kidding me. Command must have it out for me. I can do it, though!</p>
+            <br/>
+            <p>This world has both mice and songbirds, but the songbirds aren't going to last long. They're so fast, but being fast doesn't give them any advantages when there's no predators.</p>
+        </>,
+
+        organismTemplates: [
+            {
+                name: "mouse",
+                image: MouseIcon,
+                
+                weapons: 0,
+                armour: 0,
+                speed: 1,
+
+                eatsSeeds: true,
+                eatsLeaves: false,
+                eatsGrass: false,
+            },
+            {
+                name: "songbird",
+                image: MouseIcon,
+                
+                weapons: 0,
+                armour: 0,
+                speed: 3,
+
+                eatsSeeds: true,
+                eatsLeaves: false,
+                eatsGrass: false,
+            },
+        ],
+        steps: 400,
+        initialEnergyPerSpecies: 200,
+
+        seedsPerRound: 200,
+        leavesPerRound: 200,
+        grassPerRound: 200,
+
+        playerOrganismCount: 1,
+        playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => organisms[0].weapons > 0,
+        defaultPlayerOrganisms: [
+            {
+                name: "predator cat",
+                image: CatIcon,
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+
+                eatsSeeds: false,
+                eatsLeaves: false,
+                eatsGrass: false,
+            }
+        ],
+    },
+    
+    {
+        description: <>
+            <p>Damn, I'm getting good at this! I'm proud of me right now, gotta say. What have we got in store this time?</p>
+            <p>Aww, prey cats? I hate to see the poor things eaten, but it's for the good of the world, I guess.</p>
+            <br/>
+            <p>In this world, we have mice, songbirds, and falcons. We're going to have to figure out a way to balance out this mess.</p>
+        </>,
+
+        organismTemplates: [
+            {
+                name: "mouse",
+                image: MouseIcon,
+                
+                weapons: 0,
+                armour: 0,
+                speed: 1,
+
+                eatsSeeds: true,
+                eatsLeaves: false,
+                eatsGrass: false,
+            },
+            {
+                name: "songbird",
+                image: MouseIcon,
+                
+                weapons: 0,
+                armour: 0,
+                speed: 3,
+
+                eatsSeeds: true,
+                eatsLeaves: false,
+                eatsGrass: false,
+            },
+            {
+                name: "falcon",
+                image: MouseIcon,
+                
+                weapons: 1,
+                armour: 0,
+                speed: 10,
+
+                eatsSeeds: false,
+                eatsLeaves: false,
+                eatsGrass: false,
+            },
+        ],
+        steps: 400,
+        initialEnergyPerSpecies: 200,
+
+        seedsPerRound: 200,
+        leavesPerRound: 200,
+        grassPerRound: 200,
+
+        playerOrganismCount: 2,
+        playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => organisms[0].weapons > 0 && organisms[1].weapons === 0,
+        defaultPlayerOrganisms: [
+            {
+                name: "predator cat",
+                image: CatIcon,
+
+                weapons: 1,
+                armour: 0,
+                speed: 0,
+
+                eatsSeeds: false,
+                eatsLeaves: false,
+                eatsGrass: false,
+            }, 
+            
+            {
+                name: "prey cat",
                 image: CatIcon,
 
                 weapons: 0,

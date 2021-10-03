@@ -1,0 +1,33 @@
+@import '../Vars';
+
+.results {
+    display: grid;
+    grid:   "title"
+            "graph"
+            / auto;
+    gap: 1em;
+    padding: 1em;
+
+    $color: $purple;
+    border-radius: 1em;
+
+
+    color: $purple;
+    width: 100%;
+}
+
+.success {
+    border: 5px solid $green;
+}
+
+.fail {
+    border: 5px solid $pink;
+}
+
+.title {
+    text-align: center;
+}
+
+.graph {
+    height: 15em;
+}

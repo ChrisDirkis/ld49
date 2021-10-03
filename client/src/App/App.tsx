@@ -1,33 +1,52 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import Styles from './App.module.scss';
 
 import { Puzzles } from './Puzzles';
 import Creature from './Creature';
 import CreatureInput from './CreatureInput';
-import { IOrganismTemplate, simulate } from './Simulator';
+import { IOrganismTemplate } from './Simulator';
+import PuzzleResults from './PuzzleResults';
 
 const App: FC<{}> = (props) => {
+  const [passedLevels, setPassedLevels] = useState<number[]>([]);
+
+  useEffect(() => {
+    setPassedLevels(JSON.parse(localStorage.getItem("passed") ?? "[]"));
+  }, [setPassedLevels])
+
+  const setLevelPassed = (index: number) => {
+    if (!passedLevels.includes(index)) {
+      const newPassedLevels = [...passedLevels, index];
+      localStorage.setItem("passed", JSON.stringify(newPassedLevels))
+      setPassedLevels(newPassedLevels);
+    }
+  }
+
   const [selectedPuzzleIndex, setSelectedPuzzleIndex] = useState<number | null>(null);
   const [currentOrganisms, setCurrentOrganisms] = useState<IOrganismTemplate[]>([]);
+  const [currentSeed, setCurrentSeed] = useState(1);
 
   const onPuzzleSelected = useCallback((index: number) => {
-    const lastOrganisms = JSON.parse(localStorage.getItem(index.toString()) ?? "[]");
+    const lastOrganisms = JSON.parse(localStorage.getItem("puzzle" + index.toString()) ?? "[]");
     if (lastOrganisms.length > 0) {
       setCurrentOrganisms(lastOrganisms);
     }
     else {
       setCurrentOrganisms([...Puzzles[index].defaultPlayerOrganisms]);
     }
+
+    setCurrentSeed(Number.parseInt(localStorage.getItem("seed" + index.toString()) ?? "1"));
+
     setSelectedPuzzleIndex(index);
-  }, [setSelectedPuzzleIndex, setCurrentOrganisms])
+  }, [setSelectedPuzzleIndex, setCurrentOrganisms, setCurrentSeed])
 
   const onTemplateChanged = useCallback((organismTemplate: IOrganismTemplate, index: number) => {
     setCurrentOrganisms(organisms => {
       const newOrganisms = [...organisms];
       newOrganisms.splice(index, 1, organismTemplate);
       if (Puzzles[selectedPuzzleIndex!].playerOrganismsPassConstraints(newOrganisms)) {
-        localStorage.setItem(selectedPuzzleIndex!.toString(), JSON.stringify(newOrganisms));
+        localStorage.setItem("puzzle" + selectedPuzzleIndex!.toString(), JSON.stringify(newOrganisms));
         return newOrganisms;
       }
       else {
@@ -36,9 +55,12 @@ const App: FC<{}> = (props) => {
     })
   }, [setCurrentOrganisms, selectedPuzzleIndex]);
 
-  if (selectedPuzzleIndex !== null) {
-    console.log(simulate(Puzzles[selectedPuzzleIndex], currentOrganisms, .1234556));
-  }
+  const reseed = useCallback(() => {
+    setCurrentSeed(s => {
+      localStorage.setItem("seed" + selectedPuzzleIndex!.toString(), (s + 1).toString());
+      return s + 1;
+    });
+  }, [setCurrentSeed, selectedPuzzleIndex]);
 
   const selectedPuzzle = selectedPuzzleIndex === null
     ? null
@@ -56,7 +78,7 @@ const App: FC<{}> = (props) => {
             <button 
               key={i} 
               onClick={() => onPuzzleSelected(i)}
-              className={selectedPuzzleIndex === i ? "selected" : undefined}
+              className={(selectedPuzzleIndex === i ? "selected" : undefined) + " " + (passedLevels.includes(i) ? "passed" : "")}
             >
               world {i + 1}
             </button>  
@@ -71,22 +93,28 @@ const App: FC<{}> = (props) => {
         <div className={Styles["puzzleContainer"]}>
           <div className={Styles["puzzleText"]}>
             {selectedPuzzle.description}
-          </div>
-          <div className={Styles["puzzleContent"]}>
-            {currentOrganisms.map((ot, i) => 
-              <CreatureInput key={i} template={ot} onTemplateChanged={newot => onTemplateChanged(newot, i)} />
-            )}
+            
             {selectedPuzzle.organismTemplates.map((ot, i) => 
               <Creature key={i} template={ot} />
             )}
+          </div>
+          <div className={Styles["puzzleContent"]}>
             
+            <PuzzleResults 
+                puzzle={selectedPuzzle} 
+                playerOrganisms={currentOrganisms}
+                seed={Math.PI / 10 * currentSeed}
+                reseed={reseed}
+                onLevelPassed={() => setLevelPassed(selectedPuzzleIndex!)}
+            />
+            {currentOrganisms.map((ot, i) => 
+              <CreatureInput key={i} template={ot} onTemplateChanged={newot => onTemplateChanged(newot, i)} />
+            )}
           </div>
         </div>
       </div>
     }
   </>
 }
-
-function range(count: number) { return [...Array(count).keys()] }
 
 export default App;

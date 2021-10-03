@@ -19,7 +19,7 @@
 .creatureImage {
     grid-area: image;
     height: 5em;
-    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 .creatureName {

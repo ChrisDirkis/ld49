@@ -13,7 +13,7 @@ const CreatureInput: FC<ICreatureProps> = ({template, onTemplateChanged}) => {
 
     function changeValue(key: keyof IOrganismTemplate, value: any) {
         if (typeof value === "number") {
-            value = Math.max(value, 0);
+            value = Math.max(Math.round(value), 0);
         }
         const newTemplate = {...template, [key]: value};
         onTemplateChanged(newTemplate);
@@ -25,9 +25,18 @@ const CreatureInput: FC<ICreatureProps> = ({template, onTemplateChanged}) => {
         </h2>
         {template.name && <img src={template.image} alt={`stylized ${template.name}`} className={Styles["creatureImage"]} />}
         <div className={Styles["creatureNumerics"]}>
-            <label><input type="number" value={template.weapons} onChange={e => changeValue("weapons", e.target.valueAsNumber)} /> weapons</label>
-            <label><input type="number" value={template.armour} onChange={e => changeValue("armour", e.target.valueAsNumber)}/> armour</label>
-            <label><input type="number" value={template.speed} onChange={e => changeValue("speed", e.target.valueAsNumber)}/> speed</label>
+            {template.noWeaponsInput 
+                ? <span>{template.weapons} weapons</span>
+                : <label><input type="number" value={template.weapons} onChange={e => changeValue("weapons", e.target.valueAsNumber)} /> weapons</label>
+            }
+            {template.noArmourInput 
+                ? <span>{template.armour} armour</span>
+                : <label><input type="number" value={template.armour} onChange={e => changeValue("armour", e.target.valueAsNumber)} /> armour</label>
+            }
+            {template.noSpeedInput 
+                ? <span>{template.speed} speed</span>
+                : <label><input type="number" value={template.speed} onChange={e => changeValue("speed", e.target.valueAsNumber)} /> speed</label>
+            }
         </div>
         <div className={Styles["creatureBooleans"]}>
             <label><input type="checkbox" checked={template.eatsSeeds} onChange={e => changeValue("eatsSeeds", e.target.checked)} />eats seeds</label>
