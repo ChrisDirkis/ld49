@@ -1,10 +1,8 @@
 @import '../Vars';
 
 .results {
-    display: grid;
-    grid:   "title"
-            "graph"
-            / auto;
+    display: flex;
+    flex-direction: column;
     gap: 1em;
     padding: 1em;
 
@@ -21,7 +19,7 @@
 }
 
 .fail {
-    border: 5px solid $pink;
+    border: 5px solid $yellow;
 }
 
 .title {
@@ -29,5 +27,6 @@
 }
 
 .graph {
-    height: 15em;
+    height: 12em;
+    flex: 1 0 auto;
 }

@@ -103,6 +103,18 @@ button {
         
     }
 
+    &.tryAgain {
+        border: 5px solid $yellow;
+        color: $yellow;
+        background-color: adjust-color($color: $yellow, $alpha: -1);
+
+        &:hover {
+            background-color: $yellow;
+            color: $lilac;
+        }
+        
+    }
+
     &.selected.selected {
         background-color: $green;
         border: 5px solid $green;
@@ -113,6 +125,7 @@ button {
 input[type=number] {
     
     min-width: 2em;
+    width: 4em;
     min-height: 2em;
     border-radius: .5em;
     border: 5px solid $yellow;

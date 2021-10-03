@@ -39,9 +39,19 @@ const CreatureInput: FC<ICreatureProps> = ({template, onTemplateChanged}) => {
             }
         </div>
         <div className={Styles["creatureBooleans"]}>
-            <label><input type="checkbox" checked={template.eatsSeeds} onChange={e => changeValue("eatsSeeds", e.target.checked)} />eats seeds</label>
-            <label><input type="checkbox" checked={template.eatsGrass} onChange={e => changeValue("eatsGrass", e.target.checked)} />eats grass</label>
-            <label><input type="checkbox" checked={template.eatsLeaves} onChange={e => changeValue("eatsLeaves", e.target.checked)} />eats leaves</label>
+            
+        {template.noSeedsInput
+            ?  template.eatsSeeds && <span>eats seeds</span>
+            : <label><input type="checkbox" checked={template.eatsSeeds} onChange={e => changeValue("eatsSeeds", e.target.checked)} />eats seeds</label>
+        }        
+        {template.noGrassInput
+            ?  template.eatsGrass && <span>eats grass</span>
+            : <label><input type="checkbox" checked={template.eatsGrass} onChange={e => changeValue("eatsGrass", e.target.checked)} />eats grass</label>
+        }        
+        {template.noLeavesInput
+            ?  template.eatsLeaves && <span>eats leaves</span>
+            : <label><input type="checkbox" checked={template.eatsLeaves} onChange={e => changeValue("eatsLeaves", e.target.checked)} />eats leaves</label>
+        }
         </div>
     </div>
 }

@@ -67,7 +67,7 @@ const Creature: FC<IPuzzleResultsProps> = ({puzzle, playerOrganisms, seed, resee
                 </LineChart>
                 </ResponsiveContainer>
             </div>
-            {results.resultSummary === "fail" && <button onClick={reseed}>try another reality</button>}
+            {results.resultSummary === "fail" && <button className="tryAgain" onClick={reseed}>try another reality</button>}
         </>}
     </div>
 }

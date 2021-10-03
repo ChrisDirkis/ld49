@@ -69,8 +69,8 @@ const App: FC<{}> = (props) => {
   return <>
     <div className={Styles["app"]}>
       <div className={Styles["header"]}>
-        <h1>Nekoequilibrize<span style={{fontSize: "0.375em", paddingLeft: "1em"}}>猫エクリブライズ</span></h1>
-        <h3>equilibrize the worlds</h3>
+        <h1>Nekolibrium<span style={{fontSize: "0.375em", paddingLeft: "1em"}}>猫リブリウム</span></h1>
+        <h3>bring the worlds to equilibrium</h3>
       </div>
       <div className={Styles["puzzleListContainer"]}>
         <div className={Styles["puzzleList"]}>

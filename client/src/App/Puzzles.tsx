@@ -3,6 +3,8 @@ import { IOrganismTemplate, IPuzzle } from "./Simulator";
 import CatIcon from "../Images/cat.png"
 
 import MouseIcon from '../Images/mouse.png';
+import FalconIcon from '../Images/falcon.png';
+import SongbirdIcon from '../Images/songbird.png';
 
 export const Puzzles: IPuzzle[] = [
     {
@@ -79,13 +81,17 @@ export const Puzzles: IPuzzle[] = [
                 name: "predator cat",
                 image: CatIcon,
 
-                weapons: 0,
+                weapons: 1,
                 armour: 0,
                 speed: 0,
 
                 eatsSeeds: false,
                 eatsLeaves: false,
                 eatsGrass: false,
+
+                noSeedsInput: true,
+                noLeavesInput: true,
+                noGrassInput: true,
             }
         ],
     },
@@ -111,7 +117,7 @@ export const Puzzles: IPuzzle[] = [
             },
             {
                 name: "songbird",
-                image: MouseIcon,
+                image: SongbirdIcon,
                 
                 weapons: 0,
                 armour: 0,
@@ -136,13 +142,17 @@ export const Puzzles: IPuzzle[] = [
                 name: "predator cat",
                 image: CatIcon,
 
-                weapons: 0,
+                weapons: 1,
                 armour: 0,
                 speed: 0,
 
                 eatsSeeds: false,
                 eatsLeaves: false,
                 eatsGrass: false,
+
+                noSeedsInput: true,
+                noLeavesInput: true,
+                noGrassInput: true,
             }
         ],
     },
@@ -170,7 +180,7 @@ export const Puzzles: IPuzzle[] = [
             },
             {
                 name: "songbird",
-                image: MouseIcon,
+                image: SongbirdIcon,
                 
                 weapons: 0,
                 armour: 0,
@@ -182,7 +192,7 @@ export const Puzzles: IPuzzle[] = [
             },
             {
                 name: "falcon",
-                image: MouseIcon,
+                image: FalconIcon,
                 
                 weapons: 1,
                 armour: 0,
@@ -214,6 +224,10 @@ export const Puzzles: IPuzzle[] = [
                 eatsSeeds: false,
                 eatsLeaves: false,
                 eatsGrass: false,
+
+                noSeedsInput: true,
+                noLeavesInput: true,
+                noGrassInput: true,
             }, 
             
             {
@@ -227,6 +241,8 @@ export const Puzzles: IPuzzle[] = [
                 eatsSeeds: false,
                 eatsLeaves: false,
                 eatsGrass: false,
+
+                noWeaponsInput: true,
             }
         ],
     },
