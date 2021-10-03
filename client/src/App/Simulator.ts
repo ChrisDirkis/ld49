@@ -43,24 +43,22 @@ export function simulate(puzzle: IPuzzle, playerOrganisms: IOrganismTemplate[], 
 
     // Initial organisms and templates
     const organismTemplates: IOrganismTemplate[] = []
-    let organisms: number[] = [];
-    
+    let organisms: number[] = new Array(puzzle.organismTemplates.length + playerOrganisms.length).fill(0);
+    let totalOrganisms = 0;
     for (const organismTemplate of puzzle.organismTemplates) {
         const index = organismTemplates.length;
         const energy = getEnergyCost(organismTemplate);
         const organismCount = Math.floor(puzzle.initialEnergyPerSpecies / energy)
-        for (let i = 0; i < organismCount; i++) {
-            organisms.push(index);
-        }
+        organisms[index] = organismCount;
+        totalOrganisms += organismCount;
         organismTemplates.push(organismTemplate);
     }
     for (const organismTemplate of playerOrganisms) {
         const index = organismTemplates.length;
         const energy = getEnergyCost(organismTemplate);
         const organismCount = Math.floor(puzzle.initialEnergyPerSpecies / energy)
-        for (let i = 0; i < organismCount; i++) {
-            organisms.push(index);
-        }
+        organisms[index] = organismCount;
+        totalOrganisms += organismCount;
         organismTemplates.push(organismTemplate);
     }
 
@@ -77,27 +75,29 @@ export function simulate(puzzle: IPuzzle, playerOrganisms: IOrganismTemplate[], 
         resources.leaves = puzzle.leavesPerRound;
         resources.grass = puzzle.grassPerRound;
 
-        const newOrganisms: number[] = [];
-        shuffle(organisms, rng);
-        const length = organisms.length;
-        for (let i = 0; i < length - 1; i += 2) {
-            let aIndex = i;
-            let bIndex = i + 1;
+        let newOrganisms: number[] = new Array(organismTemplates.length).fill(0);
+        let newTotal = 0;
+        
+        const samples = Math.floor(totalOrganisms / 2);
+        for (let i = 0; i < samples; i ++) {
+            let aIndex = sample(organisms, totalOrganisms, organismTemplates.length, rng);
+            totalOrganisms--;
+            let bIndex = sample(organisms, totalOrganisms, organismTemplates.length, rng);
+            totalOrganisms--;
 
-            const aOrganism = organisms[aIndex];
-            const bOrganism = organisms[bIndex];
-
-            const aOrganismTemplate = organismTemplates[aOrganism];
-            const bOrganismTemplate = organismTemplates[bOrganism];
+            const aOrganismTemplate = organismTemplates[aIndex];
+            const bOrganismTemplate = organismTemplates[bIndex];
             
-            for (const child of interact(aOrganism, aOrganismTemplate, bOrganism, bOrganismTemplate, resources, rng)) {
-                newOrganisms.push(child);
+            const children = interact(aIndex, aOrganismTemplate, bIndex, bOrganismTemplate, resources, rng);
+            for (const [key, value] of children) {
+                newOrganisms[key] += value;
+                newTotal += value;
             }
         }
 
         const roundResults = organismTemplates.map(_ => 0);
-        for (const organism of newOrganisms) {
-            roundResults[organism]++;
+        for (let i = 0; i < organismTemplates.length; i ++) {
+            roundResults[i] += newOrganisms[i];
         }
         allRoundResults.push(roundResults);
         if (roundResults.some(r => r === 0)) {
@@ -105,6 +105,7 @@ export function simulate(puzzle: IPuzzle, playerOrganisms: IOrganismTemplate[], 
         }
 
         organisms = newOrganisms;
+        totalOrganisms = newTotal;
     }
 
     const lastRoundResult = allRoundResults[allRoundResults.length - 1];
@@ -113,25 +114,37 @@ export function simulate(puzzle: IPuzzle, playerOrganisms: IOrganismTemplate[], 
     return { roundResults: allRoundResults, resultSummary: lastRoundResult.some(r => r === 0) ? "fail" : "success" };
 }
 
+function sample(organisms: {[key: number]: number}, totalOrganisms: number, totalCategories: number, rng: () => number): number {
+    let roll = Math.floor(rng() * totalOrganisms);
+    let sum = 0;
+    let key = 0;
+    while (key < totalCategories) {
+        sum += organisms[key];
+        if (sum > roll) {
+            organisms[key]--;
+            return key;
+        }
+        key++;
+    }
+    console.error("Sample failure");
+    return 0;
+}
 
-function interact(aOrganism: number, aOrganismTemplate: IOrganismTemplate, bOrganism: number, bOrganismTemplate: IOrganismTemplate, resources: IResources, rng: () => number): number[] {
+
+function interact(aOrganism: number, aOrganismTemplate: IOrganismTemplate, bOrganism: number, bOrganismTemplate: IOrganismTemplate, resources: IResources, rng: () => number): number[][] {
     const fightWinnerTemplate = getFightWinner(aOrganism, aOrganismTemplate, bOrganism, bOrganismTemplate);
     if (fightWinnerTemplate) {
         const fightLoserTemplate =  fightWinnerTemplate === aOrganismTemplate ? bOrganismTemplate : aOrganismTemplate;
         const fightWinner = fightWinnerTemplate === aOrganismTemplate ? aOrganism : bOrganism;
         const predationEnergy = 0.95 * getEnergyCost(fightLoserTemplate);
-        return reproduce(fightWinner, fightWinnerTemplate, predationEnergy, rng);
+        return [[fightWinner, reproduce(fightWinnerTemplate, predationEnergy, rng)]];
     }
     else {
         // Forage
-        const newOrganisms = []
-        for (const organism of reproduce(aOrganism, aOrganismTemplate, tryForage(aOrganismTemplate, resources), rng)) {
-            newOrganisms.push(organism);
-        }
-        for (const organism of reproduce(bOrganism, bOrganismTemplate, tryForage(bOrganismTemplate, resources), rng)) {
-            newOrganisms.push(organism);
-        }
-        return newOrganisms;
+        return [
+            [aOrganism, reproduce(aOrganismTemplate, tryForage(aOrganismTemplate, resources), rng)],
+            [bOrganism, reproduce(bOrganismTemplate, tryForage(bOrganismTemplate, resources), rng)],
+        ];
     }
 }
 
@@ -144,9 +157,9 @@ function getFightWinner(aOrganism: number, aOrganismTemplate: IOrganismTemplate,
     return null;
 }
 
-const reproductionConstant = 3;
-function reproduce(organism: number, template: IOrganismTemplate, bonusEnergy: number, rng: () => number): number[] {
-    const children = []
+const reproductionConstant = 5;
+function reproduce(template: IOrganismTemplate, bonusEnergy: number, rng: () => number): number {
+    let children = 0
 
     const templateEnergy = getEnergyCost(template)
     const energy = templateEnergy * 0.8 + bonusEnergy;
@@ -154,7 +167,7 @@ function reproduce(organism: number, template: IOrganismTemplate, bonusEnergy: n
 
     for (let opportunity = 0; opportunity < reproductionOpportunities; opportunity++) {
         if (rng() < 1 / templateEnergy / reproductionConstant) {
-            children.push(organism)
+            children++;
         }
     }
 
@@ -188,18 +201,6 @@ export function getEnergyCost(template: IOrganismTemplate): number {
     cost += template.speed;
 
     return cost;
-}
-
-export function defaultOrganismTemplate(): IOrganismTemplate {
-    return {
-        weapons: 0,
-        armour: 0,
-        speed: 0,
-
-        eatsGrass: false,
-        eatsLeaves: false,
-        eatsSeeds: false,
-    }
 }
 
 function shuffle<T>(array: T[], rng: () => number) {
