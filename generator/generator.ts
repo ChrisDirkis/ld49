@@ -4,18 +4,18 @@ function generateRandomCreature(): IOrganismTemplate {
     return {
         name: "random",
 
-        weapons: Math.floor(Math.random() * 5),
-        armour: Math.floor(Math.random() * 5),
-        speed: Math.floor(Math.random() * 5),
+        weapons: Math.floor(Math.random() * 7),
+        armour: Math.floor(Math.random() * 7),
+        speed: Math.floor(Math.random() * 7),
 
-        eatsGrass: Math.random() > 0.5,
-        eatsLeaves: Math.random() > 0.5,
-        eatsSeeds: Math.random() > 0.5,
+        eatsGrass: false,
+        eatsLeaves: false,
+        eatsSeeds: Math.random() > 0.4,
     }
 }
 
 function generateRandomPuzzle(): IPuzzle {
-    const creatureCount = 3 + Math.floor(Math.random() * 3);
+    const creatureCount = 2 + Math.floor(Math.random() * 2);
 
     const creatures = [...new Array(creatureCount)].map(_ => generateRandomCreature());
     return {
@@ -25,7 +25,7 @@ function generateRandomPuzzle(): IPuzzle {
 
         initialEnergyPerSpecies: 200,
 
-        steps: 400,
+        steps: 600,
 
         organismTemplates: creatures,
         playerOrganismCount: 1,
@@ -57,19 +57,21 @@ function creatureNeighbours(creature: IOrganismTemplate): IOrganismTemplate[] {
 }
 
 let attempt = 0;
-while (true) {
+let searching = true;
+while (searching) {
     attempt++;
     console.log(`trying puzzle ${attempt}`);
 
+
     const puzzle = generateRandomPuzzle();
-    for (let i = 0; i < 10; i++) {
-        const playerCreature = generateRandomCreature();
-        if (simulate(puzzle, [playerCreature], Math.PI).resultSummary === "success") {
+    for (let i = 0; i < 100; i++) {
+        const playerCreature = { ...generateRandomCreature(), eatsSeeds: false };
+        if (simulate(puzzle, [playerCreature], Math.PI).resultSummary === "success" && simulate(puzzle, [playerCreature], Math.PI / 2).resultSummary === "success" ) {
             console.log("player passed, checking neighbours");
             const neighbours = creatureNeighbours(playerCreature);
-            let passes = 4;
+            let passes = 2;
             for (const neighbour of neighbours) {
-                if (simulate(puzzle, [neighbour], Math.PI).resultSummary === "success") {
+                if (!neighbour.eatsSeeds && simulate(puzzle, [neighbour], Math.PI).resultSummary === "success") {
                     passes--;
                     if (passes === 0) {
                         break;
@@ -80,6 +82,8 @@ while (true) {
             if (passes > 0) {
                 console.log(puzzle);
                 console.log(playerCreature);
+                searching = false;
+                break;
             }
         }
     }

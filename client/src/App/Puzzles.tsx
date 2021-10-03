@@ -6,6 +6,20 @@ import MouseIcon from '../Images/mouse.png';
 import FalconIcon from '../Images/falcon.png';
 import SongbirdIcon from '../Images/songbird.png';
 
+import BurlowIcon from '../Images/burlow.png';
+import OrmmIcon from '../Images/ormm.png';
+import KershiaIcon from '../Images/kershia.png';
+
+import BeetleIcon from '../Images/beetle.png';
+import PangolinIcon from '../Images/pangolin.png';
+import SlothIcon from '../Images/sloth.png';
+import ParakeetIcon from '../Images/parakeet.png';
+
+
+import OumouIcon from '../Images/oumou.png';
+import QixhatlIcon from '../Images/qixhatl.png';
+
+
 export const Puzzles: IPuzzle[] = [
     {
         description: <>
@@ -139,7 +153,7 @@ export const Puzzles: IPuzzle[] = [
         playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => organisms[0].weapons > 0,
         defaultPlayerOrganisms: [
             {
-                name: "predator cat",
+                name: "chompy cat",
                 image: CatIcon,
 
                 weapons: 1,
@@ -214,7 +228,7 @@ export const Puzzles: IPuzzle[] = [
         playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => organisms[0].weapons > 0 && organisms[1].weapons === 0,
         defaultPlayerOrganisms: [
             {
-                name: "predator cat",
+                name: "hunter cat",
                 image: CatIcon,
 
                 weapons: 1,
@@ -231,7 +245,7 @@ export const Puzzles: IPuzzle[] = [
             }, 
             
             {
-                name: "prey cat",
+                name: "hiding cat",
                 image: CatIcon,
 
                 weapons: 0,
@@ -247,4 +261,272 @@ export const Puzzles: IPuzzle[] = [
         ],
     },
 
+
+    {
+        description: <>
+            <p>Oh dear, I've never even heard of these creatures before, how exciting! Alright, let's get cracking.</p>
+            <br/>
+            <p><em>Good luck!</em></p>
+        </>,
+
+        organismTemplates: [    
+            {
+                name: 'ormm',
+                image: OrmmIcon,
+
+                weapons: 2,
+                armour: 2,
+                speed: 2,
+                eatsGrass: true,
+                eatsLeaves: false,
+                eatsSeeds: true
+              },
+              {
+                name: 'kershia',
+                image: KershiaIcon,
+
+                weapons: 3,
+                armour: 0,
+                speed: 4,
+                eatsGrass: true,
+                eatsLeaves: true,
+                eatsSeeds: false
+              },
+              {
+                name: 'burlow',
+                image: BurlowIcon,
+
+                weapons: 4,
+                armour: 2,
+                speed: 0,
+                eatsGrass: true,
+                eatsLeaves: true,
+                eatsSeeds: true
+              }
+        ],
+        steps: 400,
+        initialEnergyPerSpecies: 200,
+
+        seedsPerRound: 200,
+        leavesPerRound: 200,
+        grassPerRound: 200,
+
+        playerOrganismCount: 1,
+        playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => true,
+        defaultPlayerOrganisms: [{
+            name: 'confuzzled cat',
+            image: CatIcon, 
+
+            weapons: 1,
+            armour: 1,
+            speed: 1,
+            eatsGrass: false,
+            eatsLeaves: false,
+            eatsSeeds: true,
+          }
+        ],
+    },
+
+    {
+        description: <>
+            <p>Weeeeeird. This time, Command has mandated that the cats I make eat... leaves? Cats eating leaves, imagine that. </p>
+            <br/>
+            <p><em>Good luck!</em></p>
+        </>,
+
+        organismTemplates: [        
+            {
+            name: 'beetle',
+            image: BeetleIcon, 
+            weapons: 1,
+            armour: 1,
+            speed: 1,
+            eatsGrass: false,
+            eatsLeaves: false,
+            eatsSeeds: true
+          },
+          {
+            name: 'sloth',
+            image: SlothIcon, 
+            weapons: 1,
+            armour: 1,
+            speed: 0,
+            eatsGrass: false,
+            eatsLeaves: true,
+            eatsSeeds: true
+          },
+          {
+            name: 'pangolin',
+            image: PangolinIcon, 
+            weapons: 1,
+            armour: 4,
+            speed: 4,
+            eatsGrass: true,
+            eatsLeaves: true,
+            eatsSeeds: false
+          },
+          {
+            name: 'parakeet',
+            image: ParakeetIcon, 
+            weapons: 1,
+            armour: 0,
+            speed: 2,
+            eatsGrass: true,
+            eatsLeaves: true,
+            eatsSeeds: false
+          }
+        ],
+        steps: 400,
+        initialEnergyPerSpecies: 200,
+
+        seedsPerRound: 200,
+        leavesPerRound: 200,
+        grassPerRound: 200,
+
+        playerOrganismCount: 1,
+        playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => true,
+        defaultPlayerOrganisms: [
+            {
+                name: 'crunchy cat',
+                image: CatIcon, 
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+                eatsGrass: false,
+                eatsLeaves: true,
+                eatsSeeds: false,
+
+                noLeavesInput: true,
+            },
+        ],
+    },
+
+    {
+        description: <>
+            <p>Another alien planet. Command said there's something strange about the ecosystem here, and they sure were right. There's some stange flora here, and I don't my genetic reprocessor has the necessary nanoassemblers to create anything that can process them. Guess I'll have to figure something else out.</p>
+            <br/>
+            <p><em>Good luck!</em></p>
+        </>,
+
+        organismTemplates: [        
+            {
+                name: 'oumou',
+                image: OumouIcon,
+                weapons: 2,
+                armour: 5,
+                speed: 2,
+                eatsGrass: false,
+                eatsLeaves: false,
+                eatsSeeds: true
+              },
+              {
+                name: "q'ixhatl",
+                image: QixhatlIcon,
+                weapons: 0,
+                armour: 1,
+                speed: 2,
+                eatsGrass: false,
+                eatsLeaves: false,
+                eatsSeeds: true
+              }
+        ],
+        steps: 400,
+        initialEnergyPerSpecies: 200,
+
+        seedsPerRound: 200,
+        leavesPerRound: 200,
+        grassPerRound: 200,
+
+        playerOrganismCount: 1,
+        playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => true,
+        defaultPlayerOrganisms: [
+            {
+                name: 'mystical cat',
+                image: CatIcon, 
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+                eatsGrass: false,
+                eatsLeaves: false,
+                eatsSeeds: false,
+
+                noSeedsInput: true,
+                noGrassInput: true,
+                noLeavesInput: true,
+            },
+        ],
+    },
+
+    {
+        description: <>
+            <p>Woah, this world's completely empty! A blank slate. Time for me to make my mark.</p>
+            <br/>
+            <p><em>Good luck!</em></p>
+        </>,
+
+        organismTemplates: [    
+        ],
+        steps: 400,
+        initialEnergyPerSpecies: 200,
+
+        seedsPerRound: 200,
+        leavesPerRound: 200,
+        grassPerRound: 200,
+
+        playerOrganismCount: 4,
+        playerOrganismsPassConstraints: (organisms: IOrganismTemplate[]) => true,
+        defaultPlayerOrganisms: [
+            {
+                name: 'cute cat',
+                image: CatIcon, 
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+                eatsGrass: false,
+                eatsLeaves: false,
+                eatsSeeds: false,
+            },
+            {
+                name: 'spicy cat',
+                image: CatIcon, 
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+                eatsGrass: false,
+                eatsLeaves: false,
+                eatsSeeds: true,
+                noSeedsInput: true,
+            },
+            {
+                name: 'poingant cat',
+                image: CatIcon, 
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+                eatsGrass: false,
+                eatsLeaves: true,
+                eatsSeeds: false,
+                noLeavesInput: true,
+                noSeedsInput: true,
+            },
+            {
+                name: 'quizzical cat',
+                image: CatIcon, 
+
+                weapons: 0,
+                armour: 0,
+                speed: 0,
+                eatsGrass: true,
+                eatsLeaves: false,
+                eatsSeeds: false,
+                noGrassInput: true,
+                noSeedsInput: true,
+            },
+        ],
+    },
 ]
