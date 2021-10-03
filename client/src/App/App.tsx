@@ -5,7 +5,7 @@ import Styles from './App.module.scss';
 import { Puzzles } from './Puzzles';
 import Creature from './Creature';
 import CreatureInput from './CreatureInput';
-import { defaultOrganismTemplate, IOrganismTemplate, simulate } from './Simulator';
+import { IOrganismTemplate, simulate } from './Simulator';
 
 const App: FC<{}> = (props) => {
   const [selectedPuzzleIndex, setSelectedPuzzleIndex] = useState<number | null>(null);
@@ -37,7 +37,7 @@ const App: FC<{}> = (props) => {
   }, [setCurrentOrganisms, selectedPuzzleIndex]);
 
   if (selectedPuzzleIndex !== null) {
-    console.log(simulate(Puzzles[selectedPuzzleIndex], currentOrganisms, 987654321.1234556));
+    console.log(simulate(Puzzles[selectedPuzzleIndex], currentOrganisms, .1234556));
   }
 
   const selectedPuzzle = selectedPuzzleIndex === null
